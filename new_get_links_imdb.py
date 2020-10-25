@@ -40,6 +40,8 @@ def all_genres(genres, amount, name):
     for z, c in tqdm(enumerate(genres)):
         print(c)
         get_thumbnail_link(c, f"{name}.csv", amount)
+
+
 def get_thumbnail_link(genre, csv_name, amount):
     """
     Scrapes links to images, rating, name of movies.
@@ -103,6 +105,8 @@ def get_thumbnail_link(genre, csv_name, amount):
         except (IndexError, KeyboardInterrupt):
             return new
     return new
+
+
 def delete_headers(df, identifier, name):
     """
     Add unique identifier to data.
@@ -149,6 +153,8 @@ def prepare_data(df):
         return df, df.to_csv("label_thumbs.csv", sep=',', encoding='utf-8')
 
     return df, df.to_csv("label_thumbs.csv", sep=',', encoding='utf-8')
+
+
 def split(df):
     """
     Split into train test
@@ -169,6 +175,8 @@ def split(df):
     merged_back = X_train.append(X_test)
 
     return X_train, X_test, y_train, y_test, merged_back
+
+
 def create_directories():
     # STEP 1
     BASE_DIR = 'images/'
@@ -180,6 +188,7 @@ def create_directories():
     for sub_dir in SUB_DIRS:
         if not os.path.exists(BASE_DIR + sub_dir):
             os.makedirs(BASE_DIR + sub_dir)
+
 
 
 # DOWNLOADS
@@ -203,6 +212,8 @@ def download_image(image, filename, genre):
         # Open a local file with wb ( write binary ) permission.
         with open(str(f'images/{genre}_{filename}.jpeg'), 'wb') as f:
             shutil.copyfileobj(r.raw, f)
+
+
 def download_all(df):
     """
     Download the images by iterating over clean thumbnail link and requesting the image link.
@@ -274,6 +285,8 @@ def sort_images():
             dst = new_home + dst_dir + 'thriller/' + file
         else:
             pass
+
+
 def define_model():
     model = Sequential()
     model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same',
@@ -294,6 +307,8 @@ def define_model():
     opt = SGD(lr=0.001, momentum=0.9)
     model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
     return model
+
+
 def summarize_diagnostics(history):
     # plot loss
     pyplot.subplot(211)
@@ -309,6 +324,8 @@ def summarize_diagnostics(history):
     filename = sys.argv[0].split('/')[-1]
     pyplot.savefig(filename + '_plot.png')
     pyplot.close()
+
+
 def prepare_iterators():
     datagen = ImageDataGenerator(rescale=1. / 255)
 
@@ -322,6 +339,8 @@ def prepare_iterators():
                                           batch_size=64,
                                           target_size=(200, 200))
     return train_it, test_it
+
+
 def train_model(train, test):
     # define model
     model = define_model()
